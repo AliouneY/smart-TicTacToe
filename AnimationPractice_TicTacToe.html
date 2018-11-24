@@ -1,0 +1,318 @@
+<!Doctype html>
+<html>
+	
+	<title>
+		Tic Tac Toe!
+	</title>
+	
+	<style>
+		
+		*
+		{
+			margin: 0 auto;
+			padding: 0;
+		}
+		
+		html, body
+		{
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+		
+		h1
+		{
+			position: absolute;
+			font-family: "Impact";
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
+			text-align: center;
+		}
+		
+		#container
+		{
+			position: absolute;
+			width: 300px;
+			height: 300px;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
+		}
+		
+		.box
+		{
+			width: 33.33%;
+			height: 33.33%;
+			background-color: #009900;
+			cursor: pointer;
+		}
+		
+		.box:hover
+		{
+			background-color: #008000;
+		}
+		
+		.rightBox
+		{
+			float: right;
+		}
+		
+		.midBox
+		{
+			float: right;
+		}
+		
+		.leftBox
+		{
+			float: left;
+		}
+	</style>
+	
+	<body onload = "startGame()">
+		
+		<h1 id = "turnStatus"></h1>
+		
+		<div id = "container">
+			<div id = "box1" class = "box leftBox"></div> <div id = "box3" class = "box rightBox"></div> <div id = "box2" class = "box midBox"></div>
+			<div id = "box4" class = "box leftBox"></div> <div id = "box6" class = "box rightBox"></div> <div id = "box5" class = "box midBox"></div>
+			<div id = "box7" class = "box leftBox"></div> <div id = "box9" class = "box rightBox"></div> <div id = "box8" class = "box midBox"></div>
+		</div>
+		
+		<script>
+			function startGame()
+			{
+			
+				var boxClass = document.getElementsByClassName("box");
+				
+				var turnStatus = document.getElementById("turnStatus");
+				
+				var yourTurn;
+				
+				var offLimitsList = new Array(); //if anyone wants to move to a position in this list, it won't let them
+				var player1Pieces = new Array(); //a list of div ids clicked by player 1
+				var player2Pieces = new Array(); //a list of div ids clicked by player 2
+				
+				function shuffleTurn() //whoever goes first will be randomly chosen
+				{
+					var turn = Math.floor(Math.random() * 2) + 1; //choose random number between 1 and 2
+					
+					if(turn === 1) //if 1, your turn
+					{
+						yourTurn = true;
+					}
+					
+					else if(turn === 2) //if 2, player 2 turn
+					{
+						yourTurn = false;
+					}
+				}
+				
+				function alternateTurn()
+				{
+					if(yourTurn === true)
+					{
+						yourTurn = false;
+					}
+					
+					else
+					{
+						yourTurn = true;
+					}
+				}
+				
+				function offLimitsListContains(divElement)
+				{
+					
+					var contains = false;
+					
+					for(var i = 0; i < offLimitsList.length; i++)
+					{
+						if(offLimitsList[i] === divElement)
+						{
+							contains = true;
+						}
+					}
+					
+					return contains;
+				}
+				
+				function player1PiecesContains(divElement)
+				{
+					var contains = false;
+					
+					for(var i = 0; i < player1Pieces.length; i++)
+					{
+						if(player1Pieces[i] === divElement)
+						{
+							contains = true;
+						}
+					}
+					
+					return contains;
+				}
+				
+				function player2PiecesContains(divElement)
+				{
+					var contains = false;
+					
+					for(var i = 0; i < player2Pieces.length; i++)
+					{
+						if(player2Pieces[i] === divElement)
+						{
+							contains = true;
+						}
+					}
+					
+					return contains;
+				}
+				
+				function isOffLimits(selectedDivId)
+				{
+					
+					var isOffLimits = false;
+					
+					if(offLimitsListContains(selectedDivId))
+					{
+						isOffLimits = true;
+					}			
+					
+					return isOffLimits;
+				}
+				
+				var player1Win = false;
+				var player2Win = false;
+				
+				function checkForWin()
+				{
+	
+					//really long if statements here :(
+					if((player1PiecesContains("box1") && player1PiecesContains("box2") && player1PiecesContains("box3")) || (player1PiecesContains("box4") && player1PiecesContains("box5") && player1PiecesContains("box6")) || (player1PiecesContains("box7") && player1PiecesContains("box8") && player1PiecesContains("box9")) || (player1PiecesContains("box1") && player1PiecesContains("box4") && player1PiecesContains("box7")) || (player1PiecesContains("box2") && player1PiecesContains("box5") && player1PiecesContains("box8")) || (player1PiecesContains("box3") && player1PiecesContains("box6") && player1PiecesContains("box9")) || (player1PiecesContains("box1") && player1PiecesContains("box5") && player1PiecesContains("box9")) || (player1PiecesContains("box7") && player1PiecesContains("box5") && player1PiecesContains("box3")))
+					{
+						player1Win = true;
+					}
+					
+					else if((player2PiecesContains("box1") && player2PiecesContains("box2") && player2PiecesContains("box3")) || (player1PiecesContains("box4") && player1PiecesContains("box5") && player1PiecesContains("box6")) || (player1PiecesContains("box7") && player1PiecesContains("box8") && player1PiecesContains("box9")) || (player1PiecesContains("box1") && player1PiecesContains("box4") && player1PiecesContains("box7")) || (player1PiecesContains("box2") && player1PiecesContains("box5") && player1PiecesContains("box8")) || (player2PiecesContains("box4") && player2PiecesContains("box5") && player2PiecesContains("box6")) || (player2PiecesContains("box7") && player2PiecesContains("box8") && player2PiecesContains("box9")) || (player2PiecesContains("box1") && player2PiecesContains("box4") && player2PiecesContains("box7")) || (player2PiecesContains("box3") && player2PiecesContains("box6") && player2PiecesContains("box9")) || (player2PiecesContains("box1") && player2PiecesContains("box5") && player2PiecesContains("box9")) || (player2PiecesContains("box7") && player2PiecesContains("box5") && player2PiecesContains("box3")))       
+					{
+						player2Win = true;
+					}
+				}
+				
+				function displayTurnMessages()
+				{
+				
+					if(yourTurn === true && player1Win === false && player2Win === false)
+					{
+						turnStatus.innerHTML = "PLAYER 1 TURN";
+					}
+					
+					else if(yourTurn === false && player1Win === false && player2Win === false)
+					{
+						turnStatus.innerHTML = "PLAYER 2 TURN";
+					}
+					
+					else if(player1Win === true)
+					{
+						turnStatus.innerHTML = "PLAYER 1 WINS";
+					}
+					
+					else if(player2Win === true)
+					{
+						turnStatus.innerHTML = "PLAYER 2 WINS";
+					}					
+					
+					
+					if(offLimitsList.length === 9 && player1Win === false && player2Win === false)
+					{
+						turnStatus.innerHTML = "TIE";
+					}
+				}
+				
+				function placePiece()				//when called, this should put player2 piece in the box
+				{
+					if(yourTurn === false)
+					{
+						var target = Math.floor(Math.random() * 8); //pick random number between 0 & 8
+						
+						if(offLimitsList.length != 0 && player1Win === false && player2Win === false)
+						{
+							setTimeout(function()
+									   {
+											if(isOffLimits(boxClass[target].id) != true) //if the spot isn't taken, put the piece there
+											{
+												boxClass[target].style.backgroundColor = "#008000";
+												boxClass[target].style.backgroundImage = "url(\"O.png\")";
+												
+												offLimitsList.push(boxClass[target].id);
+												player2Pieces.push(boxClass[target].id);
+												checkForWin();
+												alternateTurn();
+												displayTurnMessages();
+												console.log(player1Win);
+												console.log(player2Win);
+												console.log(offLimitsList.length);
+											}
+							
+											else
+											{
+												placePiece(); //call the function again, which will make the target another number
+											}
+									   }, 1000);
+						}
+						
+						else if(offLimitsList.length === 0)
+						{
+						        setTimeout(function()
+											{
+												boxClass[target].style.backgroundColor = "#008000";
+												boxClass[target].style.backgroundImage = "url(\"O.png\")";
+												
+												offLimitsList.push(boxClass[target].id);
+												player2Pieces.push(boxClass[target].id);
+												alternateTurn();
+												displayTurnMessages();
+												console.log(player1Win);
+												console.log(player2Win);
+												console.log(offLimitsList.length);
+											}, 1000);
+						}
+					}
+				}
+				
+				shuffleTurn();
+				displayTurnMessages();
+				placePiece();
+				
+				
+				
+				for(var i = 0; i < boxClass.length; i++)
+				{
+					boxClass[i].addEventListener("click", function()
+					                                      {
+															if(isOffLimits(this.id) != true && player1Win === false && player2Win === false && yourTurn === true) //if isOffLimits(div.id) != true, change background and background color
+															{
+																this.style.backgroundColor = "#008000";
+																this.style.backgroundImage = "url(\"X.png\")";
+																
+																offLimitsList.push(this.id);
+																player1Pieces.push(this.id);
+																checkForWin();
+																alternateTurn();
+																displayTurnMessages();
+																console.log(player1Win);
+																console.log(player2Win);
+																console.log(offLimitsList.length);
+																placePiece();
+															}
+															
+														  });
+				}
+				
+			}
+		</script>
+	</body>
+</html>
